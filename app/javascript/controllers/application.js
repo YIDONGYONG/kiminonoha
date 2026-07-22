@@ -1,5 +1,6 @@
 import { Application } from "@hotwired/stimulus"
 
+<<<<<<< HEAD
 // Stimulusアプリケーションインスタンスの初期化
 const application = Application.start()
 
@@ -10,3 +11,12 @@ application.debug = false
 window.Stimulus   = application
 
 export { application }
+=======
+const application = Application.start()
+
+// Configure Stimulus development experience
+application.debug = false
+window.Stimulus   = application
+
+export { application }
+>>>>>>> 5caed5f9d91bb46f43d9158e070a08056a9814a6

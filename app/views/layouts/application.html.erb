@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+<<<<<<< HEAD
     <!-- ページタイトル（各ビューから動的に上書き可能） -->
     <title><%= content_for(:title) || "✨ Brain Awakening" %></title>
     
@@ -19,15 +20,37 @@
     <%= favicon_link_tag 'favicon-spark.png', rel: 'icon', type: 'image/png' %>
 
     <!-- アセット読み込み（Tailwind CSS / アプリケーション共通 / JSモジュール） -->
+=======
+    <title><%= content_for(:title) || "App" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+>>>>>>> 5caed5f9d91bb46f43d9158e070a08056a9814a6
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
 
   <body>
+<<<<<<< HEAD
     <!-- メインコンテンツ領域（画面中央配置） -->
     <main class="container mx-auto px-5 flex items-center justify-center min-h-screen">
       <%= yield %>
     </main>
   </body>
 </html>
+=======
+    <main class="container mx-auto mt-28 px-5 flex">
+      <%= yield %>
+    </main>
+  </body>
+</html>
+>>>>>>> 5caed5f9d91bb46f43d9158e070a08056a9814a6
