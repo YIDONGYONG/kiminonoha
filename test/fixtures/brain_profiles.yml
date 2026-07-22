@@ -1,0 +1,33 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  brain_type: MyString
+  title: MyString
+  subtitle: MyString
+  color: MyString
+  bg_color: MyString
+  gradient_from: MyString
+  gradient_to: MyString
+  emoji: MyString
+  image_url: MyString
+  keywords: MyText
+  description: MyText
+  best_learning: MyText
+  worst_learning: MyString
+  daily_mission: MyString
+
+two:
+  brain_type: MyString
+  title: MyString
+  subtitle: MyString
+  color: MyString
+  bg_color: MyString
+  gradient_from: MyString
+  gradient_to: MyString
+  emoji: MyString
+  image_url: MyString
+  keywords: MyText
+  description: MyText
+  best_learning: MyText
+  worst_learning: MyString
+  daily_mission: MyString

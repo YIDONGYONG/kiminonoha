@@ -1,0 +1,115 @@
+<!-- 外部ラッパー：全体背景のグラデーション、中央配置、およびベースの文字色設定 -->
+<div class="relative w-full min-h-screen bg-gradient-to-br from-white via-purple-50 to-purple-100 flex flex-col items-center justify-center p-4 sm:p-8 overflow-hidden font-sans selection:bg-purple-500 selection:text-white box-border text-slate-900"
+     data-controller="brain-quiz"
+     data-brain-quiz-questions-value="<%= @questions.map { |q| { id: q.id, text: q.text, options: q.options.map { |o| { text: o.text, brain_type: o.brain_type } } } }.to_json %>"
+     data-brain-quiz-profiles-value="<%= @brain_profiles.each_with_object({}) { |p, h| h[p.brain_type] = { title: p.title, subtitle: p.subtitle, color: p.color, bg_color: p.bg_color, gradient_from: p.gradient_from, gradient_to: p.gradient_to, emoji: p.emoji, keywords: p.keywords, description: p.description, best_learning: p.best_learning, worst_learning: p.worst_learning, daily_mission: p.daily_mission } }.to_json %>">
+
+  <!-- 背景のアンビエント・メッシュグラデーション（光彩エフェクト） -->
+  <div class="absolute top-[-10%] left-[-10%] w-[400px] h-[400px] bg-purple-300/40 rounded-full mix-blend-multiply filter blur-[100px] opacity-60 animate-pulse pointer-events-none"></div>
+  <div class="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-indigo-300/40 rounded-full mix-blend-multiply filter blur-[100px] opacity-60 animate-pulse pointer-events-none" style="animation-delay: 2s;"></div>
+
+  <!-- メインコンテナ：モバイル最適化幅（max-w-[430px]） -->
+  <main class="w-full max-w-[430px] mx-auto flex-1 flex flex-col justify-center z-10">
+
+    <!-- キャッチフレーズ・バッジエリア -->
+    <div class="text-center mb-6 z-10 px-4">
+      <div class="inline-block px-6 py-2.5 rounded-2xl bg-white/80 backdrop-blur-xl shadow-md border border-purple-200/60 transition-all duration-300 hover:scale-[1.02]">
+        <p class="text-sm md:text-base font-bold bg-gradient-to-r from-purple-700 via-indigo-600 to-purple-800 bg-clip-text text-transparent tracking-wide">
+          ✨ あなたの隠された天才を目覚めさせる準備はできたか？
+        </p>
+      </div>
+    </div>
+
+    <!-- クイズ進捗インジケーター -->
+    <div id="progress-container" class="mb-6 hidden">
+      <div class="flex justify-between items-center mb-3 px-2">
+        <span id="quiz-counter" class="text-xs font-bold text-indigo-700 bg-indigo-100/80 px-4 py-1.5 rounded-full border border-indigo-200 backdrop-blur-md shadow-sm">
+          Question 1 / 7
+        </span>
+        <span class="text-xs font-semibold text-slate-500 tracking-wider">君の脳分析中...</span>
+      </div>
+      <div class="w-full bg-slate-200/80 h-2.5 rounded-full overflow-hidden shadow-inner backdrop-blur-sm border border-white">
+        <div id="progress-bar" class="bg-gradient-to-r from-indigo-500 to-purple-500 h-full w-0 transition-all duration-500 ease-out rounded-full shadow-[0_0_10px_rgba(167,139,250,0.4)]"></div>
+      </div>
+    </div>
+
+    <!-- Step 1: ウェルカム画面 -->
+    <div id="step-welcome" class="bg-white/90 backdrop-blur-xl rounded-[2.5rem] shadow-2xl shadow-purple-900/10 border border-white p-8 md:p-10 text-center w-full box-border transition-all duration-500 relative overflow-hidden">
+      
+      <!-- メインビジュアル画像エリア -->
+      <div class="w-full h-84 rounded-3xl overflow-hidden mb-8 relative group shadow-inner border border-purple-100 flex items-center justify-center bg-purple-50/50">
+        <%= image_tag "main-visual.jpg.png", class: "w-full h-full object-cover transition-transform duration-700 group-hover:scale-105", alt: "あなたの脳は" %>
+      </div>
+
+      <!-- アクションボタン群 -->
+      <div class="flex flex-col gap-4 max-w-sm mx-auto">
+        <button data-action="click->brain-quiz#startQuiz" 
+                class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-extrabold py-4 px-6 rounded-2xl cursor-pointer text-[1.05rem] shadow-lg shadow-purple-500/30 transition-all duration-300 hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-3 group">
+          <span>君の脳を診断する</span>
+          <span class="inline-block transition-transform duration-300 group-hover:translate-x-2 opacity-90">→</span>
+        </button>
+        
+        <button id="btn-show-result" data-action="click->brain-quiz#showResult" 
+                class="w-full bg-white/50 hover:bg-slate-50 border border-slate-200 text-slate-600 font-bold py-3.5 px-4 rounded-2xl cursor-pointer text-sm transition-all duration-300 active:scale-[0.98] hidden backdrop-blur-sm">
+          前回の診断結果を表示
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2: クイズ出題画面 -->
+    <div id="step-quiz" class="bg-white/90 backdrop-blur-xl rounded-[2.5rem] shadow-2xl shadow-purple-900/10 border border-white p-8 md:p-10 w-full box-border hidden transition-all duration-500 relative">
+      <div class="mb-10">
+        <h3 id="quiz-text" class="text-xl font-bold leading-relaxed text-slate-800 tracking-wide break-keep">
+          質問を読み込んでいます...
+        </h3>
+      </div>
+      <div id="quiz-options" class="flex flex-col gap-4">
+        <!-- Stimulus経由で選択肢が動的に挿入されます -->
+      </div>
+    </div>
+
+    <!-- Step 3: 計算・解析中画面 -->
+    <div id="step-calculating" class="bg-white/90 backdrop-blur-xl rounded-[2.5rem] shadow-2xl shadow-purple-900/10 border border-white p-12 text-center w-full box-border hidden relative">
+      <div class="flex flex-col items-center justify-center py-10">
+        <!-- ローディングスピナー（アニメーション） -->
+        <div class="relative w-24 h-24 mb-10">
+          <div class="absolute inset-0 rounded-full border-4 border-slate-100 shadow-inner"></div>
+          <div class="absolute inset-0 rounded-full border-4 border-purple-500 border-t-transparent animate-spin drop-shadow-md"></div>
+          <div class="absolute inset-0 flex items-center justify-center text-3xl animate-pulse">🧠</div>
+        </div>
+        <h2 class="text-2xl font-extrabold mb-4 text-slate-800 tracking-wide">結果を分析中...</h2>
+        <p class="text-base text-slate-500 font-medium">回答データを解析してあなたのタイプを特定しています。</p>
+      </div>
+    </div>
+
+    <!-- Step 4: 診断結果表示画面 -->
+    <div id="step-result" class="bg-white/90 backdrop-blur-xl rounded-[2.5rem] shadow-2xl shadow-purple-900/10 border border-white p-8 md:p-10 w-full box-border hidden transition-all duration-500 relative">
+      <div id="result-content" class="mb-10 text-left text-slate-800">
+        <!-- Stimulus経由で結果内容が動的に挿入されます -->
+      </div>
+
+      <div class="border-t border-slate-100 pt-8 flex flex-col gap-4 max-w-sm mx-auto">
+        <button data-action="click->brain-quiz#startQuiz" 
+                class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-bold py-4 rounded-2xl cursor-pointer text-sm shadow-lg shadow-purple-500/30 transition-all duration-300 hover:-translate-y-1 active:translate-y-0">
+          もう一度診断する
+        </button>
+        
+        <button data-action="click->brain-quiz#showWelcome" 
+                class="w-full bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-600 font-bold py-3.5 rounded-2xl cursor-pointer text-sm tracking-wide transition-all duration-300 active:scale-[0.98]">
+          トップに戻る
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- フッター領域 -->
+  <footer class="w-full text-center mt-6 text-xs md:text-sm text-slate-500 font-medium tracking-wider z-10">
+    <p class="hover:text-purple-600 transition-colors duration-300 cursor-default">
+      ✨ 無数のエラーと昼夜を問わず戦い抜く、テック戦士たちの記録
+    </p>
+    <p class="text-[10px] text-slate-400 mt-1">
+      © 2026 Kiminonoha. Powered by Passion & Coffee.
+    </p>
+  </footer>
+</div>
