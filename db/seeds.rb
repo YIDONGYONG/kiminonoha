@@ -15,9 +15,9 @@ brain_types_data = {
     gradient_to: 'to-orange-300',
     emoji: '🐆',
     image_url: 'https://img.freepik.com/free-vector/cute-cheetah-cartoon-vector-illustration_1308-124458.jpg',
-    keywords: ['スピード', '直感', '実行力', '適応'],
+    keywords: [ 'スピード', '直感', '実行力', '適応' ],
     description: 'あなたは瞬発力に優れたチータータイプです。目標に向かって真っ直ぐ突き進む姿は周囲に活力を与えます。',
-    best_learning: ['短期間の集中学習', 'ゲーム感覚の課題', '即時のフィードバック'],
+    best_learning: [ '短期間の集中学習', 'ゲーム感覚の課題', '即時のフィードバック' ],
     worst_learning: '長引く会議や、実行のない計画',
     daily_mission: '今日一番やりたいことを、すぐに5分だけ実行してみましょう。'
   },
@@ -30,9 +30,9 @@ brain_types_data = {
     gradient_to: 'to-slate-400',
     emoji: '🦉',
     image_url: 'https://img.freepik.com/free-vector/cute-owl-cartoon-vector-illustration_1308-124446.jpg',
-    keywords: ['論理性', '洞察力', '戦略', '静寂'],
+    keywords: [ '論理性', '洞察力', '戦略', '静寂' ],
     description: 'あなたは夜の森を見渡すフクロウのように、物事の本質を冷静に見抜く力を持っています。',
-    best_learning: ['体系的な理論学習', 'マインドマップの活用', '深い内省'],
+    best_learning: [ '体系的な理論学習', 'マインドマップの活用', '深い内省' ],
     worst_learning: '根拠のない指示や、騒がしい環境',
     daily_mission: '今日得た知識を一つ、論理的に整理して書き留めてみましょう。'
   },
@@ -45,9 +45,9 @@ brain_types_data = {
     gradient_to: 'to-indigo-300',
     emoji: '🐘',
     image_url: 'https://img.freepik.com/free-vector/cute-elephant-cartoon-vector-illustration_1308-124430.jpg',
-    keywords: ['記憶力', '安定', '伝統', '忍耐'],
+    keywords: [ '記憶力', '安定', '伝統', '忍耐' ],
     description: 'あなたは一度覚えたことを忘れないゾウのように、豊富な知識と経験を活かして着実に歩むタイプです。',
-    best_learning: ['反復学習', '過去の事例研究', '視覚的なストーリー'],
+    best_learning: [ '反復学習', '過去の事例研究', '視覚的なストーリー' ],
     worst_learning: '急激な変化や、無秩序な環境',
     daily_mission: '過去に学んだ大切なことを一つ思い出し、今の状況に活かしてみましょう。'
   },
@@ -60,9 +60,9 @@ brain_types_data = {
     gradient_to: 'to-emerald-300',
     emoji: '🐬',
     image_url: 'https://cdn.pixabay.com/photo/2014/04/03/11/47/dolphin-312111_1280.png',
-    keywords: ['共感', '繋がり', '協調', '癒やし'],
+    keywords: [ '共感', '繋がり', '協調', '癒やし' ],
     description: 'あなたは海を自由に泳ぐイルカのように、周囲とのコミュニケーションを大切にし、調和を生み出すタイプです。',
-    best_learning: ['ディスカッション', 'ペア学習', '感情を込めた学習'],
+    best_learning: [ 'ディスカッション', 'ペア学習', '感情を込めた学習' ],
     worst_learning: '過度な競争や、冷淡な人間関係',
     daily_mission: '大切な人に感謝のメッセージを一つ送ってみましょう。'
   }
