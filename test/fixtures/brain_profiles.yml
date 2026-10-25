@@ -1,33 +1,25 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# フィクスチャの詳細: https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  brain_type: MyString
-  title: MyString
-  subtitle: MyString
-  color: MyString
-  bg_color: MyString
-  gradient_from: MyString
-  gradient_to: MyString
-  emoji: MyString
-  image_url: MyString
-  keywords: MyText
-  description: MyText
-  best_learning: MyText
-  worst_learning: MyString
-  daily_mission: MyString
+cheetah:
+  brain_type: Cheetah
+  title: チーター
+  subtitle: 圧倒的なスピードと即断即決
+  emoji: 🐆
+  image_url: /characters/cheetah.svg
+  keywords: "---\n- スピード\n- 直感\n"
+  description: 瞬発力に優れたチータータイプです。
+  best_learning: "---\n- 短期集中\n"
+  worst_learning: 長引く会議
+  daily_mission: 5分だけ実行してみましょう。
 
-two:
-  brain_type: MyString
-  title: MyString
-  subtitle: MyString
-  color: MyString
-  bg_color: MyString
-  gradient_from: MyString
-  gradient_to: MyString
-  emoji: MyString
-  image_url: MyString
-  keywords: MyText
-  description: MyText
-  best_learning: MyText
-  worst_learning: MyString
-  daily_mission: MyString
+owl:
+  brain_type: Owl
+  title: フクロウ
+  subtitle: 冷静沈着な分析家
+  emoji: 🦉
+  image_url: /characters/owl.svg
+  keywords: "---\n- 論理性\n"
+  description: 物事の本質を冷静に見抜くタイプです。
+  best_learning: "---\n- 体系的な理論学習\n"
+  worst_learning: 騒がしい環境
+  daily_mission: 知識を一つ整理しましょう。

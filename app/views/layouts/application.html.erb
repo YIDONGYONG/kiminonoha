@@ -3,9 +3,20 @@
   <head>
   
     <!-- ページタイトル（各ビューから動的に上書き可能） -->
-    <title><%= content_for(:title) || "Brain Awakening" %></title>
+    <title><%= page_title %></title>
+    <meta name="description" content="<%= page_description %>">
+    <link rel="canonical" href="<%= request.base_url %><%= request.path %>">
+
+    <!-- OGP -->
+    <meta property="og:site_name" content="<%= ApplicationHelper::SITE_NAME %>">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="<%= page_title %>">
+    <meta property="og:description" content="<%= page_description %>">
+    <meta property="og:url" content="<%= request.base_url %><%= request.path %>">
+    <meta name="twitter:card" content="summary">
     
     <!-- レスポンシブ対応およびPWA基本設定 -->
+    <meta name="color-scheme" content="light">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     
@@ -16,8 +27,15 @@
     <!-- ページごとの個別ヘッドタグ拡張用フック -->
     <%= yield :head %>
 
-    <!-- ブラウザータブ用ファビコン設定 (파일이 없을 경우 에러 방지를 위해 주석 처리) -->
-    <%#= favicon_link_tag 'favicon-spark.png', rel: 'icon', type: 'image/png' %>
+    <!-- ブラウザータブ用ファビコン設定 -->
+    <link rel="icon" href="/icon.png?v=4" type="image/png" sizes="256x256">
+    <link rel="apple-touch-icon" href="/icon.png?v=4">
+
+    <!-- モダンな日本語フォント -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;700;900&display=swap" rel="stylesheet">
+    <style>body { font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", system-ui, sans-serif; }</style>
 
     <!-- アセット読み込み（Tailwind CSS / アプリケーション共通） -->
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
@@ -25,10 +43,29 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
   
-  <body>
-    <!-- メインコンテンツ領域（画面中央配置） -->
-    <main class="container mx-auto px-5 flex items-center justify-center min-h-screen">
+  <body class="flex flex-col min-h-screen bg-slate-50 text-slate-900">
+    <header class="w-full border-b border-slate-200 bg-white/80 backdrop-blur">
+      <nav class="max-w-5xl mx-auto px-5 py-3 flex flex-wrap items-center justify-between gap-2 text-sm text-slate-800" aria-label="メインメニュー">
+        <%= link_to root_path, class: "flex items-center gap-1.5 text-xl font-black tracking-tight text-purple-700" do %>
+          <%= image_tag "/logo.png?v=4", alt: "", class: "w-[22px] h-[22px] rounded-full" %>君の脳
+        <% end %>
+        <ul class="flex flex-wrap gap-x-5 gap-y-1 font-black tracking-wide">
+          <li><%= link_to "診断する", root_path, class: "hover:text-purple-600" %></li>
+          <li><%= link_to "脳タイプ一覧", brain_types_path, class: "hover:text-purple-600" %></li>
+          <li><%= link_to "診断ガイド", guide_path, class: "hover:text-purple-600" %></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="flex-1 w-full">
       <%= yield %>
     </main>
+
+    <footer class="w-full border-t border-slate-200 bg-white/80 mt-8">
+      <div class="max-w-5xl mx-auto px-5 py-6 text-center">
+        <p class="text-sm md:text-base font-black text-slate-700 tracking-wide">☕ 無数のコーヒーとエラーと戦い抜いた、ランテックの勇者たちへ</p>
+        <p class="text-xs text-slate-400 mt-2">© 2026 君の脳</p>
+      </div>
+    </footer>
   </body>
 </html>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="チーターのキャラクター">
+  <circle cx="46" cy="56" r="23" fill="#F6B24A" stroke="#D9822B" stroke-width="3"/>
+  <circle cx="46" cy="58" r="11" fill="#FFD9A0"/>
+  <circle cx="154" cy="56" r="23" fill="#F6B24A" stroke="#D9822B" stroke-width="3"/>
+  <circle cx="154" cy="58" r="11" fill="#FFD9A0"/>
+  <ellipse cx="100" cy="112" rx="80" ry="70" fill="#FBC25B" stroke="#D9822B" stroke-width="3"/>
+  <ellipse cx="100" cy="138" rx="36" ry="26" fill="#FFF1D6"/>
+  <g fill="#5A3A22">
+    <ellipse cx="82" cy="62" rx="4" ry="5"/><ellipse cx="100" cy="55" rx="4.5" ry="5.5"/><ellipse cx="118" cy="62" rx="4" ry="5"/>
+    <circle cx="42" cy="112" r="4.5"/><circle cx="50" cy="94" r="4"/><circle cx="158" cy="112" r="4.5"/><circle cx="150" cy="94" r="4"/>
+  </g>
+  <path d="M63 118 Q57 132 65 143 M137 118 Q143 132 135 143" stroke="#5A3A22" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <ellipse cx="68" cy="108" rx="12" ry="15" fill="#2B1B12"/>
+  <circle cx="72.5" cy="101" r="5" fill="#fff"/><circle cx="64" cy="115" r="2.4" fill="#fff"/>
+  <ellipse cx="132" cy="108" rx="12" ry="15" fill="#2B1B12"/>
+  <circle cx="136.5" cy="101" r="5" fill="#fff"/><circle cx="128" cy="115" r="2.4" fill="#fff"/>
+  <ellipse cx="48" cy="136" rx="11" ry="6.5" fill="#FF8FA3" opacity=".6"/>
+  <ellipse cx="152" cy="136" rx="11" ry="6.5" fill="#FF8FA3" opacity=".6"/>
+  <path d="M92 126 Q100 120 108 126 Q104 136 100 136 Q96 136 92 126Z" fill="#F27C8A"/>
+  <path d="M100 136 V141 M100 141 Q92 150 84 143 M100 141 Q108 150 116 143" stroke="#5A3A22" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

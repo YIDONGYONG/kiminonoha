@@ -53,9 +53,12 @@ group :development do
 end
 
 group :test do
-  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+  # システムテスト用 [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+
+  # Rails 7.2 は minitest 6 系と互換性がないため 5 系に固定する
+  gem "minitest", "~> 5.25"
 end
 
 gem "tailwindcss-rails", "~> 4.6"

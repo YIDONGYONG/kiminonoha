@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="ゾウのキャラクター">
+  <ellipse cx="30" cy="104" rx="30" ry="42" fill="#9FB6D9" stroke="#86A1CF" stroke-width="3"/>
+  <ellipse cx="35" cy="108" rx="16" ry="27" fill="#F8C3D2"/>
+  <ellipse cx="170" cy="104" rx="30" ry="42" fill="#9FB6D9" stroke="#86A1CF" stroke-width="3"/>
+  <ellipse cx="165" cy="108" rx="16" ry="27" fill="#F8C3D2"/>
+  <ellipse cx="100" cy="98" rx="70" ry="66" fill="#B7CBEA" stroke="#86A1CF" stroke-width="3"/>
+  <path d="M84 118 Q80 172 100 178 Q120 172 116 118Z" fill="#B7CBEA" stroke="#86A1CF" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M89 142 H111 M90 156 H110" stroke="#86A1CF" stroke-width="3" stroke-linecap="round"/>
+  <path d="M92 52 Q100 38 108 52" stroke="#86A1CF" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <circle cx="72" cy="94" r="13" fill="#2A3350"/>
+  <circle cx="77" cy="88" r="5" fill="#fff"/><circle cx="68" cy="100" r="2.4" fill="#fff"/>
+  <circle cx="128" cy="94" r="13" fill="#2A3350"/>
+  <circle cx="133" cy="88" r="5" fill="#fff"/><circle cx="124" cy="100" r="2.4" fill="#fff"/>
+  <ellipse cx="54" cy="118" rx="11" ry="6.5" fill="#FF8FA3" opacity=".6"/>
+  <ellipse cx="146" cy="118" rx="11" ry="6.5" fill="#FF8FA3" opacity=".6"/>
+</svg>

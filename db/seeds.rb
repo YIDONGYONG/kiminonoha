@@ -1,4 +1,4 @@
-# 기존 데이터 초기화
+# 既存データを初期化
 Option.destroy_all
 Question.destroy_all
 BrainProfile.destroy_all
@@ -14,7 +14,7 @@ brain_types_data = {
     gradient_from: 'from-orange-100',
     gradient_to: 'to-orange-300',
     emoji: '🐆',
-    image_url: 'https://img.freepik.com/free-vector/cute-cheetah-cartoon-vector-illustration_1308-124458.jpg',
+    image_url: '/characters/cheetah.svg',
     keywords: [ 'スピード', '直感', '実行力', '適応' ],
     description: 'あなたは瞬発力に優れたチータータイプです。目標に向かって真っ直ぐ突き進む姿は周囲に活力を与えます。',
     best_learning: [ '短期間の集中学習', 'ゲーム感覚の課題', '即時のフィードバック' ],
@@ -29,7 +29,7 @@ brain_types_data = {
     gradient_from: 'from-slate-200',
     gradient_to: 'to-slate-400',
     emoji: '🦉',
-    image_url: 'https://img.freepik.com/free-vector/cute-owl-cartoon-vector-illustration_1308-124446.jpg',
+    image_url: '/characters/owl.svg',
     keywords: [ '論理性', '洞察力', '戦略', '静寂' ],
     description: 'あなたは夜の森を見渡すフクロウのように、物事の本質を冷静に見抜く力を持っています。',
     best_learning: [ '体系的な理論学習', 'マインドマップの活用', '深い内省' ],
@@ -44,7 +44,7 @@ brain_types_data = {
     gradient_from: 'from-indigo-100',
     gradient_to: 'to-indigo-300',
     emoji: '🐘',
-    image_url: 'https://img.freepik.com/free-vector/cute-elephant-cartoon-vector-illustration_1308-124430.jpg',
+    image_url: '/characters/elephant.svg',
     keywords: [ '記憶力', '安定', '伝統', '忍耐' ],
     description: 'あなたは一度覚えたことを忘れないゾウのように、豊富な知識と経験を活かして着実に歩むタイプです。',
     best_learning: [ '反復学習', '過去の事例研究', '視覚的なストーリー' ],
@@ -59,7 +59,7 @@ brain_types_data = {
     gradient_from: 'from-emerald-100',
     gradient_to: 'to-emerald-300',
     emoji: '🐬',
-    image_url: 'https://cdn.pixabay.com/photo/2014/04/03/11/47/dolphin-312111_1280.png',
+    image_url: '/characters/dolphin.svg',
     keywords: [ '共感', '繋がり', '協調', '癒やし' ],
     description: 'あなたは海を自由に泳ぐイルカのように、周囲とのコミュニケーションを大切にし、調和を生み出すタイプです。',
     best_learning: [ 'ディスカッション', 'ペア学習', '感情を込めた学習' ],

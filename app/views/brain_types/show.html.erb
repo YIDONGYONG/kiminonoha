@@ -1,0 +1,41 @@
+<% content_for :title, "#{@content['title']}タイプの特徴・強み・学び方" %>
+<% content_for :description, "#{@content['title']}タイプ（#{@content['subtitle']}）の特徴、強みと苦手、おすすめの学習法・仕事術・人間関係のコツを詳しく解説します。" %>
+<article class="max-w-3xl mx-auto px-5 py-10 text-slate-700 leading-relaxed">
+  <%= image_tag "/characters/#{@key.downcase}.svg", alt: "#{@content['title']}のキャラクター", class: "w-32 h-32 mb-2" %>
+  <h1 class="text-4xl font-black text-slate-900 mb-2"><%= @content["title"] %>タイプ</h1>
+  <p class="text-xl text-purple-700 font-black mb-4"><%= @content["subtitle"] %></p>
+  <p class="mb-6 text-lg"><%= emphasize(@content["summary"]) %></p>
+
+  <h2 class="text-2xl font-black text-slate-900 mt-8 mb-3 pl-3 border-l-4 border-purple-400">強み</h2>
+  <ul class="list-disc pl-6 space-y-1"><% @content["strengths"].each do |t| %><li><%= t %></li><% end %></ul>
+
+  <h2 class="text-2xl font-black text-slate-900 mt-8 mb-3 pl-3 border-l-4 border-purple-400">苦手・注意したい点</h2>
+  <ul class="list-disc pl-6 space-y-1"><% @content["weaknesses"].each do |t| %><li><%= t %></li><% end %></ul>
+
+  <h2 class="text-2xl font-black text-slate-900 mt-8 mb-3 pl-3 border-l-4 border-purple-400">おすすめの学び方</h2>
+  <p><%= emphasize(@content["learning"]) %></p>
+
+  <h2 class="text-2xl font-black text-slate-900 mt-8 mb-3 pl-3 border-l-4 border-purple-400">仕事の進め方</h2>
+  <p><%= emphasize(@content["work"]) %></p>
+
+  <h2 class="text-2xl font-black text-slate-900 mt-8 mb-3 pl-3 border-l-4 border-purple-400">人間関係のコツ</h2>
+  <p><%= emphasize(@content["relationships"]) %></p>
+
+  <h2 class="text-2xl font-black text-slate-900 mt-8 mb-3 pl-3 border-l-4 border-purple-400">向いている分野の例</h2>
+  <ul class="flex flex-wrap gap-2"><% @content["careers"].each do |t| %><li class="rounded-full bg-purple-50 border border-purple-200 px-3 py-1 text-sm"><%= t %></li><% end %></ul>
+
+  <h2 class="text-2xl font-black text-slate-900 mt-8 mb-3 pl-3 border-l-4 border-purple-400">今日からできる3つの習慣</h2>
+  <ol class="list-decimal pl-6 space-y-1"><% @content["tips"].each do |t| %><li><%= t %></li><% end %></ol>
+
+  <h2 class="text-2xl font-black text-slate-900 mt-8 mb-3 pl-3 border-l-4 border-purple-400">よくある質問</h2>
+  <dl class="space-y-4">
+    <% @content["faq"].each do |f| %>
+      <div><dt class="font-black text-slate-900">Q. <%= f["q"] %></dt><dd>A. <%= f["a"] %></dd></div>
+    <% end %>
+  </dl>
+
+  <nav class="mt-10 pt-6 border-t border-slate-200 text-sm" aria-label="関連ページ">
+    <%= link_to "← 脳タイプ一覧へ", brain_types_path, class: "text-purple-600 underline mr-4" %>
+    <%= link_to "診断をする", root_path, class: "text-purple-600 underline" %>
+  </nav>
+</article>

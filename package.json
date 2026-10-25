@@ -5,8 +5,9 @@
     "esbuild": "^0.28.1"
   },
   "scripts": {
-  "build": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets --watch"
-},
+    "build": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets",
+    "build:watch": "yarn build --watch"
+  },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.23"

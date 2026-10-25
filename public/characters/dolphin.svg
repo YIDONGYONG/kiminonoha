@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="イルカのキャラクター">
+  <path d="M94 44 Q104 12 136 20 Q114 28 112 50Z" fill="#4FB3E8" stroke="#3A9BD0" stroke-width="3" stroke-linejoin="round"/>
+  <ellipse cx="100" cy="110" rx="80" ry="68" fill="#5CC0F0" stroke="#3A9BD0" stroke-width="3"/>
+  <ellipse cx="100" cy="144" rx="58" ry="30" fill="#E4F6FF"/>
+  <ellipse cx="66" cy="102" rx="12" ry="15" fill="#1F3550"/>
+  <circle cx="70.5" cy="95" r="5" fill="#fff"/><circle cx="62" cy="109" r="2.4" fill="#fff"/>
+  <ellipse cx="134" cy="102" rx="12" ry="15" fill="#1F3550"/>
+  <circle cx="138.5" cy="95" r="5" fill="#fff"/><circle cx="130" cy="109" r="2.4" fill="#fff"/>
+  <ellipse cx="46" cy="128" rx="11" ry="6.5" fill="#FF8FA3" opacity=".6"/>
+  <ellipse cx="154" cy="128" rx="11" ry="6.5" fill="#FF8FA3" opacity=".6"/>
+  <path d="M80 140 Q100 166 120 140 Q100 148 80 140Z" fill="#FF8FA3" stroke="#2F6FA0" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M34 44 Q28 54 34 58 Q42 54 34 44Z" fill="#BDE8FF"/>
+  <path d="M160 52 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z" fill="#fff" opacity=".9"/>
+</svg>

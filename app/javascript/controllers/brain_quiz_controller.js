@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 
-// ブ脳タイプ診断のインタラクションを制御するStimulusコントローラー
+// 脳タイプ診断のインタラクションを制御するStimulusコントローラー
 export default class extends Controller {
   // 動的にバインドするデータ属性の定義
   static values = { questions: Array, profiles: Object }
@@ -139,6 +139,7 @@ export default class extends Controller {
       this.renderResult(profile)
       this.switchStep('result')
       window.scrollTo({ top: 0, behavior: 'smooth' })
+      this.celebrate()
     }, 1500)
   }
 
@@ -177,32 +178,33 @@ export default class extends Controller {
     else if (profile.title.includes('ゾウ') || profile.emoji === '🐘') activeTheme = themeMap['Elephant']
     else if (profile.title.includes('イルカ') || profile.emoji === '🐬') activeTheme = themeMap['Dolphin']
 
-    let faceEmoji = profile.emoji
-    if (profile.emoji === '🐆' || profile.title.includes('チーター')) faceEmoji = '🐱' // 또는 고양이/표범 느낌의 얼굴
-    else if (profile.emoji === '🐘' || profile.title.includes('ゾウ')) faceEmoji = '🐘'
-    else if (profile.emoji === '🦉' || profile.title.includes('フクロウ')) faceEmoji = '🦉'
-    else if (profile.emoji === '🐬' || profile.title.includes('イルカ')) faceEmoji = '🐬'
-
     container.innerHTML = `
       <!-- 動物の顔を中心にしたキュートなエンブレムカード -->
       <div class="relative overflow-hidden rounded-[2.5rem] p-6 md:p-8 text-center bg-gradient-to-br ${profile.gradient_from || 'from-indigo-100'} ${profile.gradient_to || 'to-indigo-300'} shadow-md mb-6 border border-white/40">
         
         <!-- サブタイトルバッジ -->
-        <span class="inline-block px-5 py-2 rounded-full text-xs md:text-sm font-extrabold bg-white/90 backdrop-blur-xs text-slate-800 shadow-sm mb-4 border border-white/60 tracking-wide">
+        <span class="inline-block px-5 py-2 rounded-full text-sm md:text-base font-black bg-white/90 backdrop-blur-xs text-slate-800 shadow-sm mb-4 border border-white/60 tracking-wide">
           ${profile.subtitle}
         </span>
 
-        <!-- 얼굴이 큼직하게 강조되는 귀여운 원형 아바타 -->
-        <div class="inline-flex items-center justify-center w-32 h-32 rounded-full bg-white/95 backdrop-blur-md shadow-xl mb-5 text-7xl transform hover:scale-105 hover:rotate-3 transition-all duration-300 border-4 ${activeTheme.border}">
-          <span class="transform scale-110">${faceEmoji}</span>
-        </div>
+        <!-- 顔だけのキュートなキャラクターアバター（タップでもう一度お祝い） -->
+        <button type="button" data-action="click->brain-quiz#celebrate" aria-label="もう一度お祝いする"
+                class="result-avatar relative inline-flex items-center justify-center w-36 h-36 rounded-full bg-white/95 shadow-xl mb-5 border-4 ${activeTheme.border} cursor-pointer active:scale-95 transition-transform">
+          ${profile.image_url
+            ? `<img src="${profile.image_url}" alt="${profile.title}のキャラクター" class="w-28 h-28 select-none" draggable="false">`
+            : `<span class="text-7xl">${profile.emoji}</span>`}
+          <span class="absolute -top-2 -right-1 text-2xl animate-bounce">🎉</span>
+        </button>
 
-        <!-- 메인 타이틀 -->
+        <!-- お祝いバナー -->
+        <p class="result-banner text-sm font-extrabold text-slate-700 mb-1 tracking-wide">🎂 診断完了！おめでとう！ 🎂</p>
+
+        <!-- メインタイトル -->
         <h2 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-5">
           ${profile.title} <span class="text-xl md:text-2xl font-bold text-slate-700">タイプ</span>
         </h2>
 
-        <!-- 키워드 태그 -->
+        <!-- キーワードタグ -->
         <div class="flex flex-wrap justify-center gap-2">
           ${keywordsArray.map(kw => `
             <span class="px-3.5 py-1.5 rounded-xl text-xs md:text-sm font-bold bg-white/90 border border-white/60 text-slate-700 shadow-2xs transition-colors duration-200 hover:bg-white">
@@ -265,6 +267,136 @@ export default class extends Controller {
     if (btnShowResult) {
       btnShowResult.classList.remove('hidden')
     }
+  }
+
+  // 誕生日パーティー風のお祝い演出（紙吹雪・風船・クラッカー・キャラのポップ）
+  celebrate() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    this.popAvatar()
+    this.stopCelebration()
+
+    const layer = document.createElement('div')
+    layer.className = 'fixed inset-0 overflow-hidden pointer-events-none z-50'
+    layer.setAttribute('aria-hidden', 'true')
+    document.body.appendChild(layer)
+    this.celebrationLayer = layer
+
+    const w = window.innerWidth
+    const h = window.innerHeight
+    const colors = ['#F472B6', '#FBBF24', '#34D399', '#60A5FA', '#A78BFA', '#FB7185', '#FDE047']
+    const rand = (min, max) => min + Math.random() * (max - min)
+    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)]
+
+    const spawn = (css, keyframes, options) => {
+      const el = document.createElement('div')
+      el.style.cssText = `position:absolute;${css}`
+      layer.appendChild(el)
+      el.animate(keyframes, { fill: 'forwards', ...options }).onfinish = () => el.remove()
+      return el
+    }
+
+    // 左右下からのクラッカー噴射
+    for (const side of [0, 1]) {
+      const originX = side === 0 ? 0 : w
+      for (let i = 0; i < 38; i++) {
+        const angle = (side === 0 ? rand(-80, -35) : rand(-145, -100)) * Math.PI / 180
+        const power = rand(0.45, 0.95) * h * 0.85
+        const dx = Math.cos(angle) * power
+        const dy = Math.sin(angle) * power
+        const size = rand(6, 11)
+        const el = spawn(
+          `left:${originX}px;top:${h}px;width:${size}px;height:${size * rand(0.4, 1.6)}px;background:${pick(colors)};border-radius:${Math.random() < 0.3 ? '50%' : '2px'};`,
+          [
+            { transform: 'translate(0,0) rotate(0deg)', opacity: 1 },
+            { transform: `translate(${dx}px,${dy}px) rotate(${rand(180, 540)}deg)`, opacity: 1, offset: 0.45 },
+            { transform: `translate(${dx * 1.15}px,${dy + h * 0.9}px) rotate(${rand(540, 900)}deg)`, opacity: 0 }
+          ],
+          { duration: rand(1800, 2800), easing: 'cubic-bezier(.2,.7,.4,1)', delay: rand(0, 200) }
+        )
+        el.style.zIndex = 2
+      }
+    }
+
+    // 上からひらひら降る紙吹雪
+    for (let i = 0; i < 70; i++) {
+      const size = rand(6, 12)
+      const x = rand(0, w)
+      const sway = rand(-60, 60)
+      spawn(
+        `left:${x}px;top:-20px;width:${size}px;height:${size * 0.6}px;background:${pick(colors)};border-radius:2px;`,
+        [
+          { transform: 'translate(0,0) rotate(0deg)', opacity: 1 },
+          { transform: `translate(${sway}px,${h * 0.55}px) rotate(${rand(200, 400)}deg)`, opacity: 1, offset: 0.6 },
+          { transform: `translate(${-sway}px,${h + 40}px) rotate(${rand(500, 900)}deg)`, opacity: 0.9 }
+        ],
+        { duration: rand(3200, 5200), delay: rand(0, 1800), easing: 'ease-in-out' }
+      )
+    }
+
+    // ふわふわ上がる風船
+    const balloonColors = ['#FB7185', '#FBBF24', '#60A5FA', '#34D399', '#A78BFA', '#F472B6']
+    for (let i = 0; i < 9; i++) {
+      const color = balloonColors[i % balloonColors.length]
+      const x = rand(4, w - 44)
+      const sway = rand(-30, 30)
+      const el = spawn(
+        `left:${x}px;top:${h + 10}px;width:40px;height:72px;`,
+        [
+          { transform: 'translate(0,0)', opacity: 1 },
+          { transform: `translate(${sway}px,${-h * 0.5}px)`, opacity: 1, offset: 0.55 },
+          { transform: `translate(${-sway}px,${-h - 120}px)`, opacity: 1 }
+        ],
+        { duration: rand(4200, 6200), delay: rand(200, 2200), easing: 'ease-out' }
+      )
+      el.innerHTML = `<svg viewBox="0 0 40 72" width="40" height="72"><ellipse cx="20" cy="22" rx="17" ry="21" fill="${color}"/><ellipse cx="13" cy="14" rx="4" ry="6" fill="#fff" opacity=".45"/><path d="M20 43 L16 49 L24 49Z" fill="${color}"/><path d="M20 49 Q14 58 20 64 Q26 70 20 72" stroke="#94A3B8" stroke-width="1.5" fill="none"/></svg>`
+    }
+
+    // きらきら星と絵文字
+    const sparkles = ['✨', '⭐', '🎉', '🎊', '💖', '🎈']
+    for (let i = 0; i < 14; i++) {
+      const el = spawn(
+        `left:${rand(5, w - 30)}px;top:${rand(h * 0.1, h * 0.7)}px;font-size:${rand(18, 30)}px;`,
+        [
+          { transform: 'scale(0) rotate(0deg)', opacity: 0 },
+          { transform: 'scale(1.3) rotate(20deg)', opacity: 1, offset: 0.35 },
+          { transform: 'scale(0.9) rotate(-10deg)', opacity: 1, offset: 0.7 },
+          { transform: 'scale(0) rotate(40deg)', opacity: 0 }
+        ],
+        { duration: rand(1400, 2200), delay: rand(100, 2600), easing: 'ease-in-out' }
+      )
+      el.textContent = pick(sparkles)
+    }
+
+    this.celebrationTimer = setTimeout(() => this.stopCelebration(), 8000)
+  }
+
+  // キャラクターとバナーのぽよんと弾むアニメーション
+  popAvatar() {
+    const avatar = this.element.querySelector('.result-avatar')
+    const banner = this.element.querySelector('.result-banner')
+    avatar?.animate([
+      { transform: 'scale(0) rotate(-20deg)' },
+      { transform: 'scale(1.25) rotate(8deg)', offset: 0.55 },
+      { transform: 'scale(0.92) rotate(-4deg)', offset: 0.78 },
+      { transform: 'scale(1) rotate(0deg)' }
+    ], { duration: 900, easing: 'cubic-bezier(.3,1.4,.5,1)' })
+    banner?.animate([
+      { transform: 'translateY(12px) scale(.8)', opacity: 0 },
+      { transform: 'translateY(0) scale(1.08)', opacity: 1, offset: 0.6 },
+      { transform: 'translateY(0) scale(1)', opacity: 1 }
+    ], { duration: 700, delay: 350, easing: 'ease-out', fill: 'backwards' })
+  }
+
+  // 演出レイヤーの片付け
+  stopCelebration() {
+    clearTimeout(this.celebrationTimer)
+    this.celebrationLayer?.remove()
+    this.celebrationLayer = null
+  }
+
+  disconnect() {
+    this.stopCelebration()
   }
 
   // 画面ステップの切り替え制御とアニメーション適用

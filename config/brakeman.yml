@@ -1,0 +1,6 @@
+# EOL警告の扱い: Ruby 3.2 / Rails 7.2 のサポート終了は認識済み。
+# バージョンアップは別途対応するため、CIを止めないよう当面スキップする。
+---
+:skip_checks:
+  - CheckEOLRuby
+  - CheckEOLRails

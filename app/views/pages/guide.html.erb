@@ -1,0 +1,30 @@
+<% content_for :title, "脳タイプ診断の仕組みと使い方" %>
+<% content_for :description, "君の脳 の脳タイプ診断の仕組み、4つのタイプの考え方、結果の活かし方と注意点を解説します。" %>
+<article class="max-w-3xl mx-auto px-5 py-10 text-slate-700 leading-relaxed">
+  <h1 class="text-4xl font-black text-slate-900 mb-6">脳タイプ診断の仕組みと使い方</h1>
+  <h2 class="text-2xl font-black text-slate-900 mt-8 mb-3 pl-3 border-l-4 border-purple-400">診断の仕組み</h2>
+  <p>診断は、行動スタイル・学び方・ストレスを感じる場面・強み・トラブル時の動き方・価値観・周囲からの印象という7つの質問で構成されています。各質問には4つの選択肢があり、それぞれがチーター・フクロウ・ゾウ・イルカのいずれかの傾向に対応しています。回答の中で最も多く選んだ傾向が、あなたの脳タイプとして表示されます。</p>
+  <h2 class="text-2xl font-black text-slate-900 mt-8 mb-3 pl-3 border-l-4 border-purple-400">4つのタイプ</h2>
+  <p class="mb-4">「スピード重視か、じっくり重視か」「論理で動くか、人との関係で動くか」を軸にした4タイプです。優劣はなく、それぞれに強みがあります。</p>
+  <ul class="grid grid-cols-2 gap-3 mb-4">
+    <% BrainTypeContent.all.each do |key, c| %>
+      <li>
+        <%= link_to brain_type_path(key.downcase), class: "flex flex-col items-center text-center h-full rounded-2xl bg-white border border-slate-200 p-3 hover:border-purple-400 transition" do %>
+          <%= image_tag "/characters/#{key.downcase}.svg", alt: "#{c['title']}のキャラクター", class: "w-16 h-16 mb-1" %>
+          <span class="text-base font-black text-slate-900"><%= c["title"] %></span>
+          <span class="text-xs font-bold text-slate-600"><%= c["subtitle"] %></span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+  <h2 class="text-2xl font-black text-slate-900 mt-8 mb-3 pl-3 border-l-4 border-purple-400">結果の活かし方</h2>
+  <ol class="list-decimal pl-6 space-y-1">
+    <li>自分のタイプの解説を読み、当てはまる点と違うと感じる点を確認する。</li>
+    <li>「おすすめの学び方」から、取り入れやすいものを一つ選んで1週間試す。</li>
+    <li>苦手な場面への対策を一つ決め、日常の習慣にしてみる。</li>
+    <li>家族や同僚と結果を共有し、お互いの違いを理解するきっかけにする。</li>
+  </ol>
+  <h2 class="text-2xl font-black text-slate-900 mt-8 mb-3 pl-3 border-l-4 border-purple-400">ご利用にあたっての注意</h2>
+  <p>人の性格や能力は、一つのタイプで言い切れるものではありません。状況や時期によって結果が変わることもあります。診断結果は、自分を理解するための「ヒント」としてお使いください。</p>
+  <p class="mt-6"><%= link_to "→ 診断をはじめる", root_path, class: "inline-block rounded-2xl bg-purple-600 text-white font-bold px-6 py-3" %></p>
+</article>

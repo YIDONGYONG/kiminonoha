@@ -1,0 +1,16 @@
+<% content_for :title, "脳タイプ一覧" %>
+<% content_for :description, "チーター・フクロウ・ゾウ・イルカ、4つの脳タイプの特徴と、学び方・仕事術のポイントを一覧で紹介します。" %>
+<section class="max-w-4xl mx-auto px-5 py-10 text-slate-700 leading-relaxed">
+  <h1 class="text-4xl font-black text-slate-900 mb-4">脳タイプ一覧</h1>
+  <p class="mb-8">4つの脳タイプの特徴を紹介します。気になるタイプを選んで、強み・苦手・学び方・仕事術をチェックしましょう。まだ診断していない方は、<%= link_to "こちらから診断", root_path, class: "text-purple-600 underline" %>できます。</p>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+    <% @contents.each do |key, c| %>
+      <%= link_to brain_type_path(key.downcase), class: "block rounded-2xl bg-white border border-slate-200 p-6 hover:border-purple-400 hover:shadow-md transition" do %>
+        <%= image_tag "/characters/#{key.downcase}.svg", alt: "#{c['title']}のキャラクター", class: "w-24 h-24 mb-2" %>
+        <h2 class="text-2xl font-black text-slate-900"><%= c["title"] %></h2>
+        <p class="text-base text-purple-700 font-black mb-2"><%= c["subtitle"] %></p>
+        <p class="text-sm"><%= emphasize(c["summary"]) %></p>
+      <% end %>
+    <% end %>
+  </div>
+</section>
