@@ -41,22 +41,23 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      mysql:
-        image: mysql:8.0
+      postgres:
+        image: postgres:16
         env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: true
-          MYSQL_DATABASE: test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test
         ports:
-          - 3306:3306
+          - 5432:5432
         options: >-
-          --health-cmd "mysqladmin ping -h localhost"
+          --health-cmd "pg_isready -U postgres"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
 
     steps:
       - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y google-chrome-stable curl default-mysql-client libjemalloc2 libvips
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y google-chrome-stable curl libpq-dev postgresql-client libjemalloc2 libvips
 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -67,17 +68,17 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: Wait for MySQL
+      - name: Wait for PostgreSQL
         run: |
-          until mysqladmin ping -h 127.0.0.1 --silent; do
-            echo 'waiting for mysql to be ready...'
+          until pg_isready -h 127.0.0.1 -U postgres; do
+            echo 'waiting for postgres to be ready...'
             sleep 2
           done
 
       - name: Setup Database
         env:
           RAILS_ENV: test
-          DATABASE_URL: mysql2://root@127.0.0.1:3306/test
+          DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/test
         run: |
           bin/rails db:create
           bin/rails db:schema:load
@@ -85,7 +86,7 @@ jobs:
       - name: Run tests
         env:
           RAILS_ENV: test
-          DATABASE_URL: mysql2://root@127.0.0.1:3306/test
+          DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/test
         run: bin/rails test test:system
 
       - name: Keep screenshots from failed system tests

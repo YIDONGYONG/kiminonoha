@@ -1,11 +1,12 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7.2.2", ">= 7.2.2.1"
+gem "rails", "~> 8.1"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
-# Use mysql as the database for Active Record
-gem "mysql2", "~> 0.5"
+# Active Record のデータベースに PostgreSQL（Neon）を使う
+gem "pg", "~> 1.5"
+
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]

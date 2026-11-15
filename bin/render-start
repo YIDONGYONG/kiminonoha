@@ -1,0 +1,12 @@
+#!/bin/sh
+# Render上でアプリを起動するスクリプト
+set -e
+
+# マイグレーションを適用する
+bin/rails db:migrate
+
+# 質問・脳タイプのデータが空のときだけ初期データを投入する
+# （db/seeds.rb は既存データを消して作り直すため、毎回は実行しない）
+bin/rails runner 'load Rails.root.join("db/seeds.rb") if BrainProfile.none? || Question.none?'
+
+exec bin/rails server -b 0.0.0.0 -p "${PORT:-10000}"

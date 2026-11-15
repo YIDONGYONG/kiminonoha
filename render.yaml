@@ -1,0 +1,25 @@
+# Render のブループリント（New > Blueprint からこのファイルを読み込む）
+services:
+  - type: web
+    name: kiminonoha
+    runtime: docker
+    plan: free
+    # 日本からのアクセスが速いよう、NeonのSingaporeリージョンに合わせる
+    region: singapore
+    dockerfilePath: ./Dockerfile.render
+    healthCheckPath: /up
+    autoDeploy: true
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_LOG_LEVEL
+        value: info
+      # Renderが自動で生成する秘密鍵
+      - key: SECRET_KEY_BASE
+        generateValue: true
+      # Neonの接続文字列。値は管理画面で自分で入力する（リポジトリには書かない）
+      - key: DATABASE_URL
+        sync: false
+      # ランテック受講生向けの限定公開なので、検索エンジンに載せない
+      - key: NOINDEX
+        value: "true"

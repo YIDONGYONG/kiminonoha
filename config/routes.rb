@@ -18,6 +18,13 @@ Rails.application.routes.draw do
   # 脳タイプの解説（一覧・詳細）
   resources :brain_types, path: "types", only: %i[index show]
 
+  # 診断結果の保存（匿名）と集計の表示
+  resources :results, only: :create
+  get "stats", to: "stats#show"
+
+  # プライバシーに関するお知らせ
+  get "privacy", to: "pages#privacy"
+
   # 検索エンジン向け（サイトマップ・robots.txt）
   get "sitemap.xml", to: "sitemaps#show", defaults: { format: :xml }, as: :sitemap
   get "robots.txt", to: "sitemaps#robots"

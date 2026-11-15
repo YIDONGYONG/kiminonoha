@@ -10,8 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_20_050403) do
-  create_table "brain_profiles", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+ActiveRecord::Schema[7.2].define(version: 2026_10_25_000000) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "brain_profiles", force: :cascade do |t|
     t.string "brain_type"
     t.string "title"
     t.string "subtitle"
@@ -30,7 +33,15 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_20_050403) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "options", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "diagnosis_results", force: :cascade do |t|
+    t.string "brain_type", null: false
+    t.json "answers", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["brain_type"], name: "index_diagnosis_results_on_brain_type"
+  end
+
+  create_table "options", force: :cascade do |t|
     t.string "text"
     t.bigint "question_id", null: false
     t.string "brain_type"
@@ -39,13 +50,13 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_20_050403) do
     t.index ["question_id"], name: "index_options_on_question_id"
   end
 
-  create_table "questions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "questions", force: :cascade do |t|
     t.string "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "users", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

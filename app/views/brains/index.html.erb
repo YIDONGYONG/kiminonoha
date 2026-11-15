@@ -25,7 +25,7 @@
       
       <!-- メインビジュアル画像エリア -->
       <div class="w-full rounded-3xl overflow-hidden mb-5 sm:mb-8 relative group shadow-inner border border-purple-100 flex items-center justify-center bg-purple-50/50">
-        <%= image_tag "main-visual.jpg.png", class: "w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105", alt: "あなたの脳は" %>
+        <%= image_tag "main-visual.jpg", width: 900, height: 1346, fetchpriority: "high", class: "w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105", alt: "あなたの脳は" %>
       </div>
 
       <!-- アクションボタン群 -->
@@ -36,6 +36,12 @@
           <span class="inline-block transition-transform duration-300 group-hover:translate-x-2 opacity-90">→</span>
         </button>
         
+        <!-- 匿名集計への協力（既定でオン。オフなら結果はサーバーへ送信しない） -->
+        <label class="flex items-start gap-2 text-left text-xs text-slate-600 font-medium leading-relaxed cursor-pointer">
+          <input id="consent-stats" type="checkbox" checked class="mt-0.5 w-4 h-4 accent-purple-600">
+          <span>匿名の集計に協力する（名前・メール・IPは保存しません。詳しくは<%= link_to "プライバシーについて", privacy_path, class: "text-purple-600 underline" %>）</span>
+        </label>
+
         <button id="btn-show-result" data-action="click->brain-quiz#showResult" 
                 class="w-full bg-white/50 hover:bg-slate-50 border border-slate-200 text-slate-600 font-bold py-3.5 px-4 rounded-2xl cursor-pointer text-sm transition-all duration-300 active:scale-[0.98] hidden backdrop-blur-sm">
           前回の診断結果を表示

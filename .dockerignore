@@ -1,0 +1,10 @@
+.git
+.github
+.claude
+log/*
+tmp/*
+node_modules
+public/assets
+app/assets/builds/*
+storage/*
+config/master.key

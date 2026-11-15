@@ -14,6 +14,12 @@ class BrainsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "チーター"
   end
 
+  test "匿名集計への同意チェックとプライバシーへのリンクがある" do
+    get root_url
+    assert_select "input#consent-stats[checked]"
+    assert_select "a[href='#{privacy_path}']"
+  end
+
   test "ヘッダーに主要ページへのリンクがある" do
     get root_url
     assert_select "header a[href='#{brain_types_path}']"

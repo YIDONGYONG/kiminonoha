@@ -4,6 +4,7 @@
   
     <!-- ページタイトル（各ビューから動的に上書き可能） -->
     <title><%= page_title %></title>
+    <% if noindex? %><meta name="robots" content="noindex, nofollow"><% end %>
     <meta name="description" content="<%= page_description %>">
     <link rel="canonical" href="<%= request.base_url %><%= request.path %>">
 
@@ -13,7 +14,9 @@
     <meta property="og:title" content="<%= page_title %>">
     <meta property="og:description" content="<%= page_description %>">
     <meta property="og:url" content="<%= request.base_url %><%= request.path %>">
-    <meta name="twitter:card" content="summary">
+    <meta property="og:image" content="<%= content_for(:og_image).presence || "#{request.base_url}/icon.png" %>">
+    <meta name="twitter:card" content="<%= content_for(:twitter_card).presence || "summary" %>">
+    <meta name="twitter:image" content="<%= content_for(:og_image).presence || "#{request.base_url}/icon.png" %>">
     
     <!-- レスポンシブ対応およびPWA基本設定 -->
     <meta name="color-scheme" content="light">
@@ -53,6 +56,7 @@
           <li><%= link_to "診断する", root_path, class: "hover:text-purple-600" %></li>
           <li><%= link_to "脳タイプ一覧", brain_types_path, class: "hover:text-purple-600" %></li>
           <li><%= link_to "診断ガイド", guide_path, class: "hover:text-purple-600" %></li>
+          <li><%= link_to "みんなの結果", stats_path, class: "hover:text-purple-600" %></li>
         </ul>
       </nav>
     </header>
@@ -64,7 +68,7 @@
     <footer class="w-full border-t border-slate-200 bg-white/80 mt-8">
       <div class="max-w-5xl mx-auto px-5 py-6 text-center">
         <p class="text-sm md:text-base font-black text-slate-700 tracking-wide">☕ 無数のコーヒーとエラーと戦い抜いた、ランテックの勇者たちへ</p>
-        <p class="text-xs text-slate-400 mt-2">© 2026 君の脳</p>
+        <p class="text-xs text-slate-400 mt-2"><%= link_to "プライバシーについて", privacy_path, class: "underline hover:text-purple-600" %> ・ © 2026 君の脳</p>
       </div>
     </footer>
   </body>

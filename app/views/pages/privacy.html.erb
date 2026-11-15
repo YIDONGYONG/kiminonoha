@@ -1,0 +1,26 @@
+<% content_for :title, "プライバシーについて" %>
+<% content_for :description, "君の脳が診断結果をどのように匿名で集計し、何を保存しないのかをご説明します。" %>
+<article class="max-w-3xl mx-auto px-5 py-10 text-slate-700 leading-relaxed">
+  <h1 class="text-4xl font-black text-slate-900 mb-6">プライバシーについて</h1>
+  <p class="mb-4">「君の脳」は、診断結果を<strong class="font-black text-slate-900">匿名</strong>で集計し、みんなの傾向を<%= link_to "集計ページ", stats_path, class: "text-purple-600 underline" %>に表示しています。</p>
+
+  <h2 class="text-2xl font-black text-slate-900 mt-8 mb-3 pl-3 border-l-4 border-purple-400">保存する情報</h2>
+  <ul class="list-disc pl-6 space-y-1">
+    <li>診断結果の脳タイプと、各質問への回答タイプ</li>
+    <li>診断した日時</li>
+  </ul>
+
+  <h2 class="text-2xl font-black text-slate-900 mt-8 mb-3 pl-3 border-l-4 border-purple-400">保存しない情報</h2>
+  <ul class="list-disc pl-6 space-y-1">
+    <li>名前・メールアドレスなどの個人情報</li>
+    <li>IPアドレス、端末情報、広告用のCookie</li>
+  </ul>
+
+  <h2 class="text-2xl font-black text-slate-900 mt-8 mb-3 pl-3 border-l-4 border-purple-400">集計の使い方</h2>
+  <p>回答が <%= DiagnosisResult::MIN_PUBLIC_COUNT %> 件に満たない間は、個人の推測を防ぐため集計を表示しません。集計は、学習方法のヒントを考えるためだけに使います。</p>
+
+  <h2 class="text-2xl font-black text-slate-900 mt-8 mb-3 pl-3 border-l-4 border-purple-400">集計への協力をやめるには</h2>
+  <p>診断を始める前に、「匿名の集計に協力する」のチェックを外してください。チェックを外した場合、結果はサーバーに送信されず、お使いのブラウザ内にだけ保存されます。</p>
+
+  <p class="text-sm text-slate-500 mt-8">制定日：2026年10月25日</p>
+</article>

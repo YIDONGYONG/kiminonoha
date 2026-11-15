@@ -22,6 +22,15 @@ class BrainTypesControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, "**"
   end
 
+  test "共有用の結果画像（OGP）が脳タイプごとに設定される" do
+    get brain_type_url("owl")
+    assert_select "meta[property='og:image'][content$='/characters/result-owl.png']"
+    assert_select "meta[name='twitter:card'][content='summary_large_image']"
+    %w[cheetah owl elephant dolphin].each do |slug|
+      assert Rails.public_path.join("characters", "result-#{slug}.png").exist?
+    end
+  end
+
   test "存在しないタイプは404になる" do
     get brain_type_url("unknown")
     assert_response :not_found

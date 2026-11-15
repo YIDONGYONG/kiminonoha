@@ -7,8 +7,14 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "h1", /診断の仕組み/
   end
 
+  test "プライバシーのお知らせが表示される" do
+    get privacy_url
+    assert_response :success
+    assert_select "h1", /プライバシー/
+  end
+
   test "削除済みのページは存在しない" do
-    %w[/about /contact /privacy /terms].each do |path|
+    %w[/about /contact /terms].each do |path|
       get path
       assert_response :not_found
     end

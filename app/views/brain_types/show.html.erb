@@ -1,3 +1,5 @@
+<% content_for :og_image, "#{request.base_url}/characters/result-#{@key.downcase}.png" %>
+<% content_for :twitter_card, "summary_large_image" %>
 <% content_for :title, "#{@content['title']}タイプの特徴・強み・学び方" %>
 <% content_for :description, "#{@content['title']}タイプ（#{@content['subtitle']}）の特徴、強みと苦手、おすすめの学習法・仕事術・人間関係のコツを詳しく解説します。" %>
 <article class="max-w-3xl mx-auto px-5 py-10 text-slate-700 leading-relaxed">

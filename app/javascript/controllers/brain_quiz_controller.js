@@ -12,6 +12,12 @@ export default class extends Controller {
     this.checkLocalStorage()
   }
 
+  // 「匿名の集計に協力する」にチェックが入っているか
+  get consented() {
+    const box = document.getElementById('consent-stats')
+    return !box || box.checked
+  }
+
   // ローカルストレージに過去の診断結果が存在するか確認し、ボタンの表示を制御
   checkLocalStorage() {
     const saved = localStorage.getItem('codeApp_result')
@@ -137,6 +143,7 @@ export default class extends Controller {
 
       localStorage.setItem('codeApp_result', JSON.stringify({ type: bestType, timestamp: new Date().toISOString() }))
       this.renderResult(profile)
+      this.saveResult(bestType)
       this.switchStep('result')
       window.scrollTo({ top: 0, behavior: 'smooth' })
       this.celebrate()
@@ -261,11 +268,305 @@ export default class extends Controller {
         </h3>
         <p class="text-slate-200 text-xs md:text-sm font-medium leading-relaxed">${profile.daily_mission}</p>
       </div>
+
+      <!-- SNSシェア（結果画像を共有する） -->
+      <div class="mt-6 text-center">
+        <p class="text-sm font-black text-slate-800 mb-1">結果の画像をシェアしよう 🎉</p>
+        <p class="text-xs text-slate-500 mb-3">タイプ入りの結果画像つきで投稿できます</p>
+        <div class="grid grid-cols-2 gap-3">
+          ${this.shareButtons()}
+        </div>
+        <button type="button" data-action="click->brain-quiz#saveImage" class="mt-3 text-xs font-bold text-slate-500 underline cursor-pointer">画像だけ保存する</button>
+      </div>
     `
+
+    this.prepareShareImage(profile)
 
     const btnShowResult = document.getElementById('btn-show-result')
     if (btnShowResult) {
       btnShowResult.classList.remove('hidden')
+    }
+  }
+
+  // シェア用のURL（脳タイプの解説ページ。ここにOGP画像が設定されている）
+  shareUrl(profile) {
+    return `${window.location.origin}/types/${this.typeSlug(profile)}`
+  }
+
+  // プロフィールから脳タイプのスラッグ（cheetah など）を求める
+  typeSlug(profile) {
+    const entry = Object.entries(this.profilesValue).find(([, p]) => p.title === profile.title)
+    return (entry ? entry[0] : 'cheetah').toLowerCase()
+  }
+
+  // シェア文面
+  shareText(profile) {
+    return `私の脳タイプは「${profile.title}」でした！ ${profile.subtitle} #君の脳`
+  }
+
+  // 結果画像をシェアする4つのSNSボタン（ロゴは使わず文字ラベルのボタンにする）
+  shareButtons() {
+    const base = 'flex items-center justify-center py-3 rounded-2xl font-black text-sm text-white cursor-pointer active:scale-95 transition-transform shadow-sm'
+    const button = (target, label, color) =>
+      `<button type="button" data-action="click->brain-quiz#share" data-target="${target}" class="${base} ${color}">${label}</button>`
+
+    return [
+      button('x', 'X', 'bg-slate-900'),
+      button('instagram', 'Instagram', 'bg-gradient-to-r from-pink-500 via-fuchsia-500 to-orange-400'),
+      button('line', 'LINE', 'bg-emerald-500'),
+      button('facebook', 'Facebook', 'bg-blue-600')
+    ].join('')
+  }
+
+  // 結果画像（PNG）を先に作っておく。共有ボタンを押した瞬間に使えるようにするため
+  prepareShareImage(profile) {
+    this.currentProfile = profile
+    this.shareImagePromise = this.buildShareImage(profile).catch(() => null)
+  }
+
+  // 結果画像を1080x1350（Instagramの縦長比率）のPNGとして描画する
+  async buildShareImage(profile) {
+    const slug = this.typeSlug(profile)
+    const theme = {
+      cheetah: ['#FFE7C7', '#FDBA74', '#C2570C'],
+      owl: ['#E3E1FB', '#A5A0F5', '#4C3FB0'],
+      elephant: ['#DCEBFB', '#93BFEF', '#2F5FA3'],
+      dolphin: ['#D5F5EC', '#6FD6BC', '#12795F']
+    }[slug] || ['#EDE9FE', '#C4B5FD', '#6D28D9']
+    const fontFamily = '"Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif'
+
+    try {
+      await Promise.all([document.fonts.load(`900 64px ${fontFamily}`), document.fonts.load(`700 40px ${fontFamily}`)])
+    } catch (error) {
+      // フォントを読み込めない場合は代替フォントで描画する
+    }
+
+    const canvas = document.createElement('canvas')
+    canvas.width = 1080
+    canvas.height = 1350
+    const ctx = canvas.getContext('2d')
+
+    // 背景のグラデーション
+    const bg = ctx.createLinearGradient(0, 0, 1080, 1350)
+    bg.addColorStop(0, theme[0])
+    bg.addColorStop(1, theme[1])
+    ctx.fillStyle = bg
+    ctx.fillRect(0, 0, 1080, 1350)
+
+    // 中央の白いカード
+    ctx.save()
+    ctx.shadowColor = 'rgba(60, 30, 120, 0.25)'
+    ctx.shadowBlur = 50
+    ctx.shadowOffsetY = 20
+    ctx.fillStyle = '#FFFFFF'
+    this.roundRect(ctx, 70, 110, 940, 1130, 64)
+    ctx.fill()
+    ctx.restore()
+
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'alphabetic'
+
+    // ヘッダー
+    ctx.fillStyle = '#7C3AED'
+    ctx.font = `900 44px ${fontFamily}`
+    ctx.fillText('君の脳 ｜ 脳タイプ診断', 540, 205)
+
+    // キャラクター（円形の枠付き）
+    ctx.beginPath()
+    ctx.arc(540, 450, 195, 0, Math.PI * 2)
+    ctx.fillStyle = theme[0]
+    ctx.fill()
+    ctx.lineWidth = 12
+    ctx.strokeStyle = theme[1]
+    ctx.stroke()
+    const character = new Image()
+    character.src = profile.image_url
+    await character.decode()
+    ctx.drawImage(character, 540 - 150, 450 - 150, 300, 300)
+
+    // タイトルとサブタイトル
+    ctx.fillStyle = '#0F172A'
+    ctx.font = `900 112px ${fontFamily}`
+    ctx.fillText(`${profile.title}タイプ`, 540, 770)
+    ctx.fillStyle = theme[2]
+    ctx.font = `900 46px ${fontFamily}`
+    ctx.fillText(profile.subtitle, 540, 850)
+
+    // キーワードのタグ
+    ctx.font = `700 38px ${fontFamily}`
+    const tags = (profile.keywords || []).slice(0, 4).map(k => `#${k}`)
+    const widths = tags.map(t => ctx.measureText(t).width + 56)
+    let x = 540 - (widths.reduce((a, b) => a + b, 0) + (tags.length - 1) * 16) / 2
+    tags.forEach((tag, i) => {
+      ctx.fillStyle = theme[0]
+      this.roundRect(ctx, x, 895, widths[i], 68, 34)
+      ctx.fill()
+      ctx.fillStyle = theme[2]
+      ctx.fillText(tag, x + widths[i] / 2, 942)
+      x += widths[i] + 16
+    })
+
+    // 説明文（折り返して最大3行）
+    ctx.fillStyle = '#475569'
+    ctx.font = `500 38px ${fontFamily}`
+    this.wrapText(ctx, profile.description || '', 800).slice(0, 3).forEach((line, i) => {
+      ctx.fillText(line, 540, 1045 + i * 58)
+    })
+
+    // フッター
+    ctx.fillStyle = '#334155'
+    ctx.font = `900 40px ${fontFamily}`
+    ctx.fillText('あなたも診断してみよう', 540, 1300)
+
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'))
+    return blob ? new File([blob], `kiminonoha-${slug}.png`, { type: 'image/png' }) : null
+  }
+
+  // 角丸の四角形のパスを作る
+  roundRect(ctx, x, y, width, height, radius) {
+    ctx.beginPath()
+    ctx.moveTo(x + radius, y)
+    ctx.arcTo(x + width, y, x + width, y + height, radius)
+    ctx.arcTo(x + width, y + height, x, y + height, radius)
+    ctx.arcTo(x, y + height, x, y, radius)
+    ctx.arcTo(x, y, x + width, y, radius)
+    ctx.closePath()
+  }
+
+  // 指定幅に収まるように文字を折り返す（日本語は1文字ずつ判定）
+  wrapText(ctx, text, maxWidth) {
+    const lines = []
+    let line = ''
+    for (const char of text) {
+      if (ctx.measureText(line + char).width > maxWidth) {
+        lines.push(line)
+        line = char
+      } else {
+        line += char
+      }
+    }
+    if (line) lines.push(line)
+    return lines
+  }
+
+  // SNSボタン：スマホは結果画像つきの共有シートを開く。PCは各SNSの投稿画面を開く
+  // （X・LINE・Facebookはリンクのプレビューに結果画像が表示される。Instagramは画像を保存する）
+  async share(event) {
+    const target = event.currentTarget.dataset.target
+    const profile = this.currentProfile
+    if (!profile) return
+
+    const file = await this.shareImagePromise
+    const text = this.shareText(profile)
+    const url = this.shareUrl(profile)
+
+    // PCの共有シートにはSNSアプリが出ないため、タッチ端末のときだけ使う
+    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches
+    if (isTouchDevice && file && navigator.canShare?.({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], text: `${text}\n${url}` })
+        return
+      } catch (error) {
+        if (error.name === 'AbortError') return // ユーザーが共有をキャンセルした
+      }
+    }
+
+    const encodedUrl = encodeURIComponent(url)
+    if (target === 'instagram') {
+      // Instagramには投稿用のURLがないため、画像を保存して文面をコピーし、サイトを開く
+      if (file) this.downloadImage(file)
+      try { await navigator.clipboard.writeText(`${text}\n${url}`) } catch (error) { /* コピーできなくても続行する */ }
+      this.showToast('結果画像を保存しました。Instagramの投稿に添付してね！')
+      window.open('https://www.instagram.com/', '_blank', 'noopener')
+      return
+    }
+
+    if (target === 'x') {
+      // Xの投稿画面は画像の貼り付けに対応しているため、画像をコピーしてから開く
+      const copied = await this.copyImageToClipboard(file)
+      if (!copied && file) this.downloadImage(file)
+      this.showToast(copied
+        ? '結果画像をコピーしました。投稿欄で貼り付け（⌘V / Ctrl+V）してね！'
+        : '結果画像を保存しました。投稿に添付してね！')
+      window.open(`https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodedUrl}`, '_blank', 'noopener')
+      return
+    }
+
+    // LINE・Facebookはリンクしか渡せないため、リンク先のプレビュー画像（OGP）で結果画像を見せる
+    const links = {
+      line: `https://social-plugins.line.me/lineit/share?url=${encodedUrl}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`
+    }
+    this.showToast(this.isPublicHost()
+      ? 'リンクのプレビューに結果画像が表示されます'
+      : '公開前のURLのため、プレビュー画像は公開後に表示されます')
+    window.open(links[target], '_blank', 'noopener')
+  }
+
+  // 画像をクリップボードにコピーする（成功したら true）
+  async copyImageToClipboard(file) {
+    if (!file || !navigator.clipboard?.write || typeof ClipboardItem === 'undefined') return false
+
+    try {
+      await navigator.clipboard.write([new ClipboardItem({ 'image/png': file })])
+      return true
+    } catch (error) {
+      return false
+    }
+  }
+
+  // SNSのサーバーから見える公開URLか（localhostや社内IPでは false）
+  isPublicHost() {
+    const host = window.location.hostname
+    return !(host === 'localhost' || host.endsWith('.local') || /^(127\.|10\.|192\.168\.)/.test(host))
+  }
+
+  // 「画像を保存」ボタン
+  async saveImage() {
+    const file = await this.shareImagePromise
+    if (file) {
+      this.downloadImage(file)
+      this.showToast('結果画像を保存しました！')
+    }
+  }
+
+  // 画像ファイルをダウンロードさせる
+  downloadImage(file) {
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(file)
+    link.download = file.name
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000)
+  }
+
+  // 画面下部に短いメッセージを表示する
+  showToast(message) {
+    const toast = document.createElement('div')
+    toast.textContent = message
+    toast.className = 'fixed left-1/2 bottom-6 -translate-x-1/2 z-50 max-w-[90vw] px-5 py-3 rounded-2xl bg-slate-900 text-white text-sm font-bold shadow-xl'
+    document.body.appendChild(toast)
+    toast.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200, fill: 'forwards' })
+    setTimeout(() => toast.remove(), 3500)
+  }
+
+  // 診断結果を匿名でサーバーへ保存する（同意がない場合・失敗した場合は何もしない）
+  async saveResult(brainType) {
+    if (!this.consented) return
+
+    try {
+      await fetch('/results', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.content || ''
+        },
+        body: JSON.stringify({ brain_type: brainType, answers: this.answers })
+      })
+    } catch (error) {
+      // 保存に失敗しても診断結果の表示には影響させない
     }
   }
 

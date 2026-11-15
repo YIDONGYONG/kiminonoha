@@ -1,13 +1,14 @@
 services:
   db:
-    image: mysql:8.0
+    image: postgres:16
     environment:
-      MYSQL_ROOT_PASSWORD: password
+      POSTGRES_PASSWORD: password
       TZ: Asia/Tokyo
     ports:
-      - "3306:3306"
+      # 他のPostgreSQLが5432を使っていても衝突しないよう、ホスト側は5433にする
+      - "5433:5432"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - pg_data:/var/lib/postgresql/data
 
   redis:
     image: redis:latest
@@ -40,7 +41,7 @@ services:
       - redis
 
 volumes:
-  mysql_data:
+  pg_data:
   bundle_data:
   node_modules:
   redis:

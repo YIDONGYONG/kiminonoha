@@ -1,0 +1,43 @@
+<% content_for :title, "みんなの脳タイプ" %>
+<% content_for :description, "君の脳の診断結果を匿名で集計した、脳タイプの分布と学習のヒントです。" %>
+<section class="max-w-3xl mx-auto px-5 py-10 text-slate-700 leading-relaxed">
+  <h1 class="text-4xl font-black text-slate-900 mb-2">みんなの脳タイプ</h1>
+  <p class="text-lg font-black text-purple-700 mb-6">全体の集計（<%= @total %>件）</p>
+
+  <% if @public %>
+    <div class="space-y-3 mb-10">
+      <% @ranking.each do |type| %>
+        <% count = @counts.fetch(type, 0) %>
+        <% percent = (count * 100.0 / @total).round %>
+        <% content = BrainTypeContent.all[type] %>
+        <div class="flex items-center gap-3">
+          <%= image_tag "/characters/#{type.downcase}.svg", alt: "", class: "w-12 h-12 shrink-0" %>
+          <div class="flex-1">
+            <div class="flex justify-between text-sm font-black text-slate-900 mb-1">
+              <span><%= content["title"] %></span><span><%= percent %>%（<%= count %>件）</span>
+            </div>
+            <div class="h-3 rounded-full bg-slate-200 overflow-hidden">
+              <div class="h-full rounded-full bg-gradient-to-r from-indigo-500 to-purple-500" style="width: <%= percent %>%"></div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <% top = BrainTypeContent.all[@top_type] %>
+    <h2 class="text-2xl font-black text-slate-900 mt-8 mb-3 pl-3 border-l-4 border-purple-400">いちばん多いのは「<%= top["title"] %>」</h2>
+    <p class="mb-4"><%= emphasize(top["summary"]) %></p>
+    <h3 class="text-xl font-black text-slate-900 mb-2">おすすめの学び方</h3>
+    <p class="mb-4"><%= emphasize(top["learning"]) %></p>
+    <h3 class="text-xl font-black text-slate-900 mb-2">ペア学習のヒント</h3>
+    <p class="mb-4"><%= emphasize("**#{top['title']}×#{BrainTypeContent.all[top['pair_with']]['title']}**：#{top['pair_tip']}") %></p>
+  <% else %>
+    <div class="rounded-2xl bg-white border border-slate-200 p-6 text-center">
+      <p class="text-xl font-black text-slate-900 mb-2">集計はまだ準備中です</p>
+      <p>個人が特定されないよう、回答が <%= DiagnosisResult::MIN_PUBLIC_COUNT %> 件集まるまで表示しません。あと <%= DiagnosisResult::MIN_PUBLIC_COUNT - @total %> 件です。</p>
+    </div>
+  <% end %>
+
+  <p class="mt-8 text-sm">データの扱いは<%= link_to "プライバシーについて", privacy_path, class: "text-purple-600 underline" %>をご覧ください。</p>
+  <p class="mt-4"><%= link_to "→ 診断をはじめる", root_path, class: "inline-block rounded-2xl bg-purple-600 text-white font-bold px-6 py-3" %></p>
+</section>

@@ -2,6 +2,11 @@ module ApplicationHelper
   SITE_NAME = "君の脳".freeze
   DEFAULT_DESCRIPTION = "7つの質問で分かる無料の脳タイプ診断。チーター・フクロウ・ゾウ・イルカの4タイプから、あなたの学び方・仕事の進め方・人との関わり方のヒントを見つけましょう。".freeze
 
+  # 環境変数 NOINDEX=true のとき、検索エンジンに載せない（限定公開用）
+  def noindex?
+    ENV["NOINDEX"] == "true"
+  end
+
   def page_title
     title = content_for(:title)
     title.present? ? "#{title} | #{SITE_NAME}" : "#{SITE_NAME} - 無料の脳タイプ診断"
