@@ -87,7 +87,10 @@ jobs:
         env:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/test
-        run: bin/rails test test:system
+        # Rails 8.1 では "test test:system" を1コマンドにまとめられないため、分けて実行する
+        run: |
+          bin/rails test
+          bin/rails test:system
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
