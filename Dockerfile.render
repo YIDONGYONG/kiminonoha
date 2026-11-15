@@ -1,5 +1,5 @@
 # Render（本番）用のDockerfile。開発用の Dockerfile とは別に管理する。
-FROM ruby:3.2.5-slim
+FROM ruby:3.4.7-slim
 
 ENV RAILS_ENV=production \
     BUNDLE_DEPLOYMENT=1 \

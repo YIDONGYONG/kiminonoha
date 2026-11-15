@@ -18,7 +18,7 @@
 
 | 구분 | 내용 |
 |---|---|
-| 언어 / 프레임워크 | Ruby 3.2.5 / Rails 8.1 |
+| 언어 / 프레임워크 | Ruby 3.4.7 / Rails 8.1 |
 | 프런트엔드 | Hotwire (Turbo + Stimulus), Tailwind CSS 4, esbuild |
 | DB | PostgreSQL (개발: Docker 16 / 배포: Neon 무료 플랜) |
 | 서버 | Puma (개발: Docker Compose / 배포: Render 무료 웹 서비스) |
@@ -116,6 +116,7 @@ erDiagram
 | 운영용 `Dockerfile.render`를 개발용과 분리 | 개발용은 볼륨 마운트 전제이고, 운영은 빌드 시점에 에셋을 미리 컴파일해야 해서 |
 | 시작 스크립트에서 "데이터가 비었을 때만" 시드 실행 | `db/seeds.rb`는 기존 데이터를 지우고 다시 만들기 때문에 재시작마다 돌리면 안 되어서 |
 | minitest 5계열로 고정 | Rails는 minitest 6과 호환되지 않기 때문(CI 실패의 원인이었음) |
+| Ruby 3.2 → 3.4, CI의 Ruby는 `3.4`(최신 패치) | GitHub Actions의 `ubuntu-latest`가 Ubuntu 26으로 바뀌면서 3.2.5가 제공되지 않아 CI가 실패했고, 3.2는 지원도 종료되어서 |
 | Rails 7.2 → 8.1 업그레이드 | 7.2에는 알려진 취약점이 다수(bundler-audit)였고 지원도 종료되어서. 업그레이드 후 취약점 0건 |
 | 메인 이미지를 7MB → 약 300KB로 압축 | 모바일 첫 화면 로딩 시간을 줄이기 위해 |
 
@@ -175,7 +176,6 @@ function keepAlive() {
 - ⬜ 배포 직후 스모크 테스트: `/up` → 진단 1회 → `/stats` 건수 증가 → 링크 미리보기(OGP) 확인
 
 ### 권장 (공개 범위를 넓히기 전에)
-- 🔶 **Ruby 3.2 → 3.4** (3.2는 지원 종료). `.ruby-version`, 두 Dockerfile, CI를 함께 변경
 - 🔶 **`config.hosts` 설정**: 지금은 어떤 Host 헤더도 받아서 OGP 절대 URL이 조작될 수 있음. `RENDER_EXTERNAL_HOSTNAME`만 허용하되 `/up`은 제외(`host_authorization.exclude`). Render에서 직접 확인해야 하므로 배포 후 적용
 - 🔶 **CSP(Content Security Policy)**: 현재 미설정. 결과 화면이 `innerHTML` 템플릿을 쓰고 Google Fonts를 불러오므로 허용 목록과 함께 도입
 - 🔶 **`innerHTML` 이스케이프**: 현재 데이터는 자체 시드뿐이라 위험이 낮지만, 관리 화면이나 사용자 입력을 도입하면 반드시 이스케이프
@@ -192,7 +192,6 @@ function keepAlive() {
 ## 13. 알려진 과제
 
 - 메인 비주얼(`app/assets/images/main-visual.jpg`, 원본 `main-visual.jpg.png`)이 기존 애니메이션 포스터와 매우 비슷해, **공개 전에 직접 만든 이미지로 교체**해야 합니다.
-- Ruby 3.2는 지원이 종료되어 Brakeman의 EOL 경고를 `config/brakeman.yml`에서 일시적으로 건너뛰고 있습니다. Ruby 3.4 이상으로 올려야 합니다.
 - 무료 서버는 접속이 없으면 잠들 수 있어 Google Apps Script로 주기적으로 깨우고 있습니다(그래도 재배포 직후 첫 접속은 느릴 수 있음).
 - 아직 **배포 전**이라 실제 사용자 데이터는 없습니다. 수치는 배포 후 실제 값을 기록할 예정입니다.
 - Neon 무료 플랜은 일정 시간 후 DB가 대기 상태가 되어 첫 쿼리가 약간 느릴 수 있습니다.

@@ -140,6 +140,7 @@ GEM
     marcel (1.2.1)
     matrix (0.4.3)
     mini_mime (1.1.5)
+    mini_portile2 (2.8.9)
     minitest (5.27.0)
     msgpack (1.8.7)
     net-imap (0.6.8)
@@ -152,6 +153,9 @@ GEM
     net-smtp (0.5.2)
       net-protocol
     nio4r (2.7.5)
+    nokogiri (1.19.7)
+      mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
     nokogiri (1.19.7-aarch64-linux-gnu)
       racc (~> 1.4)
     nokogiri (1.19.7-x86_64-darwin)
@@ -162,6 +166,7 @@ GEM
     parser (3.3.13.0)
       ast (~> 2.4.1)
       racc
+    pg (1.7.0)
     pg (1.7.0-aarch64-linux)
     pg (1.7.0-x86_64-darwin)
     pg (1.7.0-x86_64-linux)
@@ -293,6 +298,7 @@ GEM
     tailwindcss-rails (4.7.0)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 4.0)
+    tailwindcss-ruby (4.3.4)
     tailwindcss-ruby (4.3.4-aarch64-linux-gnu)
     tailwindcss-ruby (4.3.4-x86_64-darwin)
     tailwindcss-ruby (4.3.4-x86_64-linux-gnu)
@@ -350,4 +356,4 @@ DEPENDENCIES
   web-console
 
 BUNDLED WITH
-   2.4.19
+  2.6.9
