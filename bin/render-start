@@ -2,6 +2,27 @@
 # Render上でアプリを起動するスクリプト
 set -e
 
+# DATABASE_URL は貼り付け時に空白・改行・引用符が混ざりやすいため、取り除いてから使う
+if [ -n "$DATABASE_URL" ]; then
+  DATABASE_URL=$(printf '%s' "$DATABASE_URL" | tr -d "[:space:]\"'")
+  export DATABASE_URL
+fi
+
+# 必須の環境変数を確認する（値そのものはパスワードを含むため、ログには出さない）
+case "$DATABASE_URL" in
+  postgres://*|postgresql://*) ;;
+  *)
+    echo "ERROR: DATABASE_URL が未設定、または postgresql:// で始まっていません（現在の長さ: ${#DATABASE_URL}文字）。" >&2
+    echo "Render の Environment で、Neon の接続文字列（Direct connection）を設定し直してください。" >&2
+    exit 1
+    ;;
+esac
+
+if [ -z "$SECRET_KEY_BASE" ]; then
+  echo "ERROR: SECRET_KEY_BASE が未設定です。Render の Environment で Generate ボタンから作成してください。" >&2
+  exit 1
+fi
+
 # マイグレーションを適用する
 bin/rails db:migrate
 
